@@ -10,3 +10,4 @@ public class CompPair<U, V extends Comparable<V>> extends Pair<U, V> implements 
 		return this.second.compareTo(other.second);
 	}
 }
+/*aloooo*/
