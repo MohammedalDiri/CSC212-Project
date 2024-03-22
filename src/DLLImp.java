@@ -39,9 +39,7 @@ public class DLLImp<T> implements DLL<T>{
     }
 
     @Override
-    public void findPrevious() {
-        current = current.prev
-    }
+    public void findPrevious() { current = current.prev ; }
 
     @Override
     public T retrieve() {
