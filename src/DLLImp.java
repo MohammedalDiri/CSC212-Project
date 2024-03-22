@@ -1,7 +1,6 @@
 public class DLLImp<T> implements DLL<T>{
     private DLLNode<T> head;
     private DLLNode<T> current;
-
     private int ListSize;
 
     public DLLImp() {
@@ -68,6 +67,7 @@ public class DLLImp<T> implements DLL<T>{
             current.next = tmp;
             current = tmp;
         }
+        ListSize++;
     }
 
     @Override
@@ -87,5 +87,6 @@ public class DLLImp<T> implements DLL<T>{
             else
                 current = current.next;
         }
+        ListSize--;
     }
 }
