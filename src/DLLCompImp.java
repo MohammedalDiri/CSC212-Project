@@ -91,10 +91,10 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
             if (current.next != null)
                 current.next.prev = current.prev;
         }
-            if (last())
-                current = head;
-            else
-                current = current.next;
+        if (last())
+            current = head;
+        else
+            current = current.next;
 
         ListSize--;
     }
@@ -107,10 +107,11 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
             this.increasing = increasing; // this will help with the two following methods.
             isSorted = true; // this will help with the two following methods.
 
-            T[] Dl = (T[]) new Object[ListSize];
+            T[] Dl = (T[]) new Comparable[ListSize];
+            int index = 0;
             findFirst();
-            for (int i = 0; i < ListSize; i++) {
-                Dl[i] = retrieve();
+            while (!empty()) {
+                Dl[index++] = retrieve();
                 remove(); // This loop inserts each element into the array and removes it from the list to then insert it back to the list sorted.
             }
 
@@ -127,7 +128,7 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
     @Override
     public T getMax() { // This method requires list must not be empty.
         if (isSorted) // If the list is sorted check the order.
-            if (increasing) // If in increasing order return the first element else return the last element.
+            if (!increasing) // If in increasing order return the first element else return the last element.
                 return head.data;
             else
                 return LastElement();
@@ -149,7 +150,7 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
     @Override
     public T getMin() {
         if (isSorted) // If the list is sorted check the order.
-            if (!increasing) // If in decreasing order return the first element else return the last element.
+            if (increasing) // If in decreasing order return the first element else return the last element.
                 return head.data;
             else
                 return LastElement();
