@@ -90,12 +90,12 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
             current.prev.next = current.next;
             if (current.next != null)
                 current.next.prev = current.prev;
-
+        }
             if (last())
                 current = head;
             else
                 current = current.next;
-        }
+
         ListSize--;
     }
 

@@ -70,21 +70,20 @@ public class DLLImp<T> implements DLL<T>{
 
     @Override
     public void remove() {
-        if(current == head){
+        if (current == head) {
             head = head.next;
-            if(head != null)
+            if (head != null)
                 head.prev = null;
-        }
-        else{
+        } else {
             current.prev.next = current.next;
-            if(current.next != null)
+            if (current.next != null)
                 current.next.prev = current.prev;
-
-            if(last())
-                current = head;
-            else
-                current = current.next;
         }
+        if (last())
+            current = head;
+        else
+            current = current.next;
+
         ListSize--;
     }
 }
