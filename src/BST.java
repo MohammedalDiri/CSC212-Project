@@ -2,7 +2,8 @@ public class BST<T> implements Map{
     BSTNode<T> root ;
     BSTNode<T>  current ;
     private int co = 0 ;
-
+//DID NOT BEGIN IN THIS CLASS THIS IS JUST IMPLMENTATION OF THE METHODS
+//WILL START AFTER FINISHING BST AND USE THIS AS EX FOR THE QUIZ
     public BST()
     {
         root = current = null;
