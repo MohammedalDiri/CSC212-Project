@@ -1,9 +1,10 @@
+import org.w3c.dom.Node;
+
 public class BST<T> implements Map{
     BSTNode<T> root ;
     BSTNode<T>  current ;
-    private int co = 0 ;
-//DID NOT BEGIN IN THIS CLASS THIS IS JUST IMPLMENTATION OF THE METHODS
-//WILL START AFTER FINISHING BST AND USE THIS AS EX FOR THE QUIZ
+
+
     public BST()
     {
         root = current = null;
@@ -12,12 +13,11 @@ public class BST<T> implements Map{
     public boolean empty()
     {
         return root == null;
-    }
+    } // no need for explanation
 
     @Override
-    public void clear() {
-
-    }
+    public void clear()
+    {root = null ;} // this will simple clear the whole tree , garbage collector will clean up these unreferenced nodes
 
 
     public T retrieve ()
@@ -32,6 +32,7 @@ public class BST<T> implements Map{
 
     @Override
     public boolean find(Comparable key) {
+
         return false;
     }
 
@@ -47,6 +48,7 @@ public class BST<T> implements Map{
 
     @Override
     public boolean remove(Comparable key) {
+
         return false;
     }
 
@@ -55,8 +57,17 @@ public class BST<T> implements Map{
         return null;
     }
 
-    public int size()
-    { return co ; }
+    public int size() // will return the size of the tree
+    { return HelperCounter(root) ; }
+
+  private int HelperCounter(BSTNode<T> node) //this method is going to count each node in the tree
+  {
+    if(node == null)
+        return 0;
+    int left = HelperCounter(node.left) ;
+    int right = HelperCounter(node.right) ;
+     return 1 + left + right ;
+  }
 
 
 
