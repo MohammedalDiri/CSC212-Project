@@ -1,18 +1,18 @@
 // this class is a node for the BST
-public class BSTNode <T>
+public class BSTNode <K,T>
 {
-    public int key;
+    public K key;
     public T data;
-    public BSTNode<T> left, right;
+    public BSTNode<K,T> left, right;
 
-    public BSTNode(int k, T val)
+    public BSTNode(K k, T val)
     {
         key = k;
         data = val;
         left = right = null;
     }
 
-    public BSTNode(int k, T val, BSTNode<T> l, BSTNode<T> r)
+    public BSTNode(K k, T val, BSTNode<K,T> l, BSTNode<K,T> r)
     {
         key = k;
         data = val;
