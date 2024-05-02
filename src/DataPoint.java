@@ -8,7 +8,7 @@ public class DataPoint<T> {
 	public Date date;
 
 	// The value of the data point.
-	public T value;
+	public T value; // value here is referring to the class StockData.
 
 	public DataPoint(Date date, T value) {
 		this.date = date;
@@ -17,7 +17,7 @@ public class DataPoint<T> {
 
 	@Override
 	public String toString() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		return dateFormat.format(date) + " : " + value.toString();
-	}
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // The simple format is available because of the import of SimpleDateFormat.
+		return dateFormat.format(date) + " : " + value.toString(); // As we already said the value refers stock data, so we may need to implement a display method in StockData.
+ 	}
 }

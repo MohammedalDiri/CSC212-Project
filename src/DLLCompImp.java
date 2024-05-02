@@ -2,8 +2,8 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
     private DLLNode<T> head;
     private DLLNode<T> current;
     private int ListSize;
-    boolean increasing;
-    boolean isSorted = false;
+    private boolean increasing;
+    private boolean isSorted = false;
 
     public DLLCompImp() {
         head = current = null;
