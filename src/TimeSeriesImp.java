@@ -127,8 +127,37 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
     }
 
     @Override
-    public DLL<DataPoint<T>> getAllDataPoints() {
-        return null;
+    public DLL<DataPoint<T>> getAllDataPoints()
+    {
+        if (DataPoints.empty()) {
+            return new DLLImp<>(); // Return an empty DLL
+        }
+        // since DataPoint Doesnt implement comparable so i cant use DLLCompImp so i did this
+        // manipulation and used ComPair which is Comparable by itself to create a DLL that has the Method Sort()
+        // after sorting the DLLCompImp(tmpList) im going to empty it in the DLLImp(finalList) and will be sorted
+        DLLCompImp<CompPair<DataPoint<T>, Date>> tmpList = new DLLCompImp<>();
+        DataPoints.findFirst();
+        while(!DataPoints.last())
+        {
+            tmpList.insert(DataPoints.retrieve());
+            DataPoints.findNext();
+        }
+        tmpList.insert(DataPoints.retrieve()); // insert last DataPoint
+
+        // it will sort list by date in increasing order
+        tmpList.sort(true);
+
+        // Empty the Sorted List in a normal DLL of type DataPoint
+        DLL<DataPoint<T>> finalList = new DLLImp<>();
+        tmpList.findFirst();
+      while(!tmpList.last())
+      {
+          finalList.insert(tmpList.retrieve().first); // to insert only the DataPoint without the Date
+          tmpList.findNext();
+      }
+        finalList.insert(tmpList.retrieve().first); // insert of the last element
+
+        return finalList;
     }
 
     @Override
