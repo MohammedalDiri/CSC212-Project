@@ -23,7 +23,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
 
 
     public Pair<K, T>  retrieve ()
-    { // dont know how it can return the KEY  and data at same time >> should it return the node ???
+    { // return the Key and Value of the Node this is why i used Pair
 
 
         if (current != null) {
