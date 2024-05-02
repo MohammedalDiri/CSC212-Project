@@ -120,12 +120,37 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
             return false;
         }
     }
+    private boolean search(Date val) { // search method we need it in removeDataPoint method
+        boolean found = false;
+        DataPoints.findFirst();
+        while (!DataPoints.last()) {
+            if (DataPoints.retrieve().second.compareTo(val) == 0)
+                found = true;
 
-    @Override
-    public boolean removeDataPoint(Date date) { // Not done yet
-        return false;
+            DataPoints.findNext();
+        }
+        // Check if the last node contains the value
+        if (!found && DataPoints.retrieve().second.compareTo(val) == 0) {
+            found = true;
+        }
+        if (!found) {
+            // Value not found in the list, reset current to first
+            DataPoints.findFirst();
+        }
+        return found;
     }
 
+
+
+    @Override
+    public boolean removeDataPoint(Date date) {
+        if (search(date)) { // Search for the value
+            DataPoints.remove();
+            return true; // Return true indicating successful removal
+        } else {
+            return false; // Return false if the value is not found
+        }
+    }
     @Override
     public DLL<DataPoint<T>> getAllDataPoints()
     {
