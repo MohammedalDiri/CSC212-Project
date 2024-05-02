@@ -162,6 +162,23 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
 
     @Override
     public DLL<DataPoint<T>> getDataPointsInRange(Date startDate, Date endDate) {
-        return null;
+        DLL<DataPoint<T>> list = new DLLImp<>();
+        if(startDate == null)
+            startDate = getMinDate() ;
+        if(endDate == null)
+            endDate = getMaxDate() ;
+        if(DataPoints.empty())
+            return list;
+        DataPoints.findFirst();
+        while (!DataPoints.last())
+        { // checking if its in between using compareTo()
+            if(DataPoints.retrieve().second.compareTo(startDate) >= 0 && DataPoints.retrieve().second.compareTo(endDate) <= 0)
+                list.insert(DataPoints.retrieve().first);
+            DataPoints.findNext();
+        }
+        if(DataPoints.retrieve().second.compareTo(startDate) >= 0 && DataPoints.retrieve().second.compareTo(endDate) <= 0)
+            list.insert(DataPoints.retrieve().first);
+        // check sorting
+        return list;
     }
 }
