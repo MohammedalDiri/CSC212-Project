@@ -133,10 +133,7 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
         if (!found && DataPoints.retrieve().second.compareTo(val) == 0) {
             found = true;
         }
-        if (!found) {
-            // Value not found in the list, reset current to first
-            DataPoints.findFirst();
-        }
+
         return found;
     }
 
