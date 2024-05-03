@@ -42,14 +42,14 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
         if (DataPoints.empty())
             return null;
         else {
-            DataPoints.sort(true); // This call sorts the list of CompPair (it can because as explained before it implements comparable)
-            DLL<Date> SortedDate = new DLLImp<>(); // Initialize a DLL of dates.
+            DLL<Date> SortedDate = new DLLCompImp<>(); // Initialize a DLL of dates.
             DataPoints.findFirst();
             while (!DataPoints.last()) {
                 SortedDate.insert(DataPoints.retrieve().second); // Inserts dates into the list.
                 DataPoints.findNext();
             }
             SortedDate.insert(DataPoints.retrieve().second);
+            ((DLLCompImp)SortedDate).sort(true); // This sorts the new made list not our list.
             return SortedDate; // Returns a list of sorted dates.
         }
     }
@@ -95,7 +95,7 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
     }
 
     @Override
-    public boolean updateDataPoint(DataPoint<T> dataPoint) {
+    public boolean updateDataPoint(DataPoint<T> dataPoint) { // Time comp: O(n), Space comp: O(1)
         if (DataPoints.empty())
             return false; // The data point doesn't exist.
         else {
@@ -110,7 +110,7 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
                 }
                 DataPoints.findNext();
             }
-            if (DataPoints.retrieve().second.compareTo(dataPoint.date) == 0) {
+            if (DataPoints.retrieve().second.compareTo(dataPoint.date) == 0) { // Checks the last element.
                 CompPair<DataPoint<T>, Date> NewDP = new CompPair<DataPoint<T>, Date>(dataPoint, dataPoint.date);
                 NewDP.first.date = DataPoints.retrieve().second;
                 NewDP.second = DataPoints.retrieve().second;
@@ -123,24 +123,23 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
     private boolean search(Date val) { // search method we need it in removeDataPoint method
         boolean found = false;
         DataPoints.findFirst();
-        while (!DataPoints.last()) {
+        while (!DataPoints.last() && !found) { // it makes sure that the list doesn't get out of bounds and if the element is found it stops.
             if (DataPoints.retrieve().second.compareTo(val) == 0)
                 found = true;
 
             DataPoints.findNext();
         }
         // Check if the last node contains the value
-        if (!found && DataPoints.retrieve().second.compareTo(val) == 0) {
+        if (!found && DataPoints.retrieve().second.compareTo(val) == 0)
             found = true;
-        }
 
         return found;
     }
-
-
-
     @Override
     public boolean removeDataPoint(Date date) {
+        if(DataPoints.empty()) // Check first if the list is empty.
+            return false;
+
         if (search(date)) { // Search for the value
             DataPoints.remove();
             return true; // Return true indicating successful removal
@@ -149,14 +148,10 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
         }
     }
     @Override
-    public DLL<DataPoint<T>> getAllDataPoints()
-    {
+    public DLL<DataPoint<T>> getAllDataPoints() {
         if (DataPoints.empty()) {
             return new DLLImp<>(); // Return an empty DLL
         }
-        // since DataPoint Doesnt implement comparable so i cant use DLLCompImp so i did this
-        // manipulation and used ComPair which is Comparable by itself to create a DLL that has the Method Sort()
-        // after sorting the DLLCompImp(tmpList) im going to empty it in the DLLImp(finalList) and will be sorted
         DLLCompImp<CompPair<DataPoint<T>, Date>> tmpList = new DLLCompImp<>();
         DataPoints.findFirst();
         while(!DataPoints.last())
@@ -185,21 +180,35 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
     @Override
     public DLL<DataPoint<T>> getDataPointsInRange(Date startDate, Date endDate) {
         DLL<DataPoint<T>> list = new DLLImp<>();
-        if(startDate == null)
+        if(startDate == null) // As per the specs if the start date is null pass the value of the minimum date to it.
             startDate = getMinDate() ;
+
         if(endDate == null)
             endDate = getMaxDate() ;
+
         if(DataPoints.empty())
             return list;
+
+        DLLCompImp<CompPair<DataPoint<T>, Date>> tmpList = new DLLCompImp<>();
         DataPoints.findFirst();
-        while (!DataPoints.last())
-        { // checking if its in between using compareTo()
-            if(DataPoints.retrieve().second.compareTo(startDate) >= 0 && DataPoints.retrieve().second.compareTo(endDate) <= 0)
-                list.insert(DataPoints.retrieve().first);
+        while(!DataPoints.last())
+        {
+            tmpList.insert(DataPoints.retrieve());
             DataPoints.findNext();
         }
-        if(DataPoints.retrieve().second.compareTo(startDate) >= 0 && DataPoints.retrieve().second.compareTo(endDate) <= 0)
-            list.insert(DataPoints.retrieve().first);
+        tmpList.insert(DataPoints.retrieve()); // insert last DataPoint
+
+        // it will sort list by date in increasing order
+        tmpList.sort(true);
+
+        while (!tmpList.last())
+        { // checking if its in between using compareTo()
+            if(tmpList.retrieve().second.compareTo(startDate) >= 0 && tmpList.retrieve().second.compareTo(endDate) <= 0)
+                list.insert(tmpList.retrieve().first);
+            tmpList.findNext();
+        }
+        if(tmpList.retrieve().second.compareTo(startDate) >= 0 && tmpList.retrieve().second.compareTo(endDate) <= 0)
+            list.insert(tmpList.retrieve().first);
         // check sorting
         return list;
     }
