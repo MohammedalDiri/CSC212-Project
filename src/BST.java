@@ -163,7 +163,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         HelperInserter(node.right, tmp); // handling right subtree
     }
 
-    private BSTNode<K,T> find_min(BSTNode<K,T> p)
+    public BSTNode<K,T> find_min(BSTNode<K,T> p)
     { // this was written by bader
         // helper method to find the minimum value
         if(p == null)
@@ -172,6 +172,18 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         while(p.left != null)
         {
             p = p.left;
+        }
+
+        return p;
+    }
+    public BSTNode<K,T> find_max(BSTNode<K,T> p)
+    {
+        if(p == null)
+            return null;
+
+        while(p.right != null)
+        {
+            p = p.right;
         }
 
         return p;
