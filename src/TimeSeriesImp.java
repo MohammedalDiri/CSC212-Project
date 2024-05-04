@@ -22,7 +22,7 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
     @Override
     public T getDataPoint(Date date) {
         if (dataPoints.find(date)) { // Search for the date in BST
-            return dataPoints.retrieve().second.value;
+            return dataPoints.retrieve().value;
         }
         return null; // Date not found, return null
     }

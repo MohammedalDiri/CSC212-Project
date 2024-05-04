@@ -10,7 +10,7 @@ public interface Map<K extends Comparable<K>, T> {
 	void clear();
 
 	// Return the key and data of the current element
-	Pair<K, T>  retrieve();
+	T  retrieve();
 
 	// Update the data of current element.
 	void update(T e);

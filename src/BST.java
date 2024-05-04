@@ -22,12 +22,12 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
     {root = null ;} // this will simple clear the whole tree , garbage collector will clean up these unreferenced nodes
 
 
-    public Pair<K, T>  retrieve ()
+    public T retrieve ()
     { // return the Key and Value of the Node this is why i used Pair
 
 
         if (current != null) {
-            return new Pair<K,T>(current.key, current.data);
+            return current.data;
         }
         return null;  // or throw an exception if 'current' being null is unexpected
 
