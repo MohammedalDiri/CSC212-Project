@@ -11,8 +11,48 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
 
     @Override
     public NumericTimeSeries calculateMovingAverage(int period)
-    {
-        return null;
+    { if(period <= 0 || TimeSeries.empty() )
+            return new NumericTimeSeriesImp();
+
+        NumericTimeSeriesImp result = new NumericTimeSeriesImp();
+
+        DLL<DataPoint<Double>> allDataPoints = TimeSeries.getAllDataPoints();
+        int DataSize = allDataPoints.size();
+
+        if(DataSize < period) // If there is fewer data points than the period, return an empty series.
+            return result;
+
+        allDataPoints.findFirst();
+
+        double sum = 0 ;
+        for(int i = 0 ; i < period ; i++) // // calc the sum with the first period data points
+        {
+                sum += allDataPoints.retrieve().value ;
+                allDataPoints.findNext();
+            if (i < period - 1)
+                allDataPoints.findNext();
+        }
+
+        // Calculate the first average and add it to the results
+        DataPoint<Double> currentDataPoint = allDataPoints.retrieve();
+        double average = sum / period;
+        result.addDataPoint(new DataPoint<Double>(currentDataPoint.date, average));
+
+
+        allDataPoints.findFirst();  // Start from the beginning of the list again
+        for (int i = 0; i < DataSize - period; i++) {
+            sum -= allDataPoints.retrieve().value;  // Subtract the element that's leaving the window
+            allDataPoints.findNext();
+            allDataPoints.findNext();
+            currentDataPoint = allDataPoints.retrieve();
+            sum += currentDataPoint.value;
+
+            average = sum / period;  // Calculate new average
+            result.addDataPoint(new DataPoint<Double>(currentDataPoint.date, average));
+            allDataPoints.findPrevious();  // Move back to the start of the window for the next iteration
+        }
+        return result ;
+
     }
 
     @Override
