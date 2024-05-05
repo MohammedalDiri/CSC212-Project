@@ -14,7 +14,7 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
     { if(period <= 0 || TimeSeries.empty() )
             return new NumericTimeSeriesImp();
 
-        NumericTimeSeriesImp result = new NumericTimeSeriesImp();
+        NumericTimeSeries result = new NumericTimeSeriesImp();
 
         DLL<DataPoint<Double>> allDataPoints = TimeSeries.getAllDataPoints();
         int DataSize = allDataPoints.size();
@@ -28,7 +28,6 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
         for(int i = 0 ; i < period ; i++) // // calc the sum with the first period data points
         {
                 sum += allDataPoints.retrieve().value ;
-                allDataPoints.findNext();
             if (i < period - 1)
                 allDataPoints.findNext();
         }
@@ -65,15 +64,11 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
         tmp.findFirst(); ;
 
         DataPoint<Double> max = tmp.retrieve() ;
-
         while(!tmp.last())
         {
-            if(tmp.retrieve().value > max.value)
-                max = tmp.retrieve() ;
-
             tmp.findNext();
         }
-        return max;
+        return tmp.retrieve();
     }
 
     @Override
@@ -81,20 +76,11 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
     {
         if(TimeSeries.empty())
             return null;
+
+
         DLL<DataPoint<Double>> tmp = TimeSeries.getAllDataPoints();
-
-        tmp.findFirst(); ;
-
-        DataPoint<Double> min = tmp.retrieve() ;
-
-        while(!tmp.last())
-        {
-            if(tmp.retrieve().value < min.value)
-                min = tmp.retrieve() ;
-
-            tmp.findNext();
-        }
-        return min;
+        tmp.findFirst();
+        return tmp.retrieve();
     }
 
     @Override

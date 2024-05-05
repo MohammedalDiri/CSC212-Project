@@ -117,6 +117,32 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         } // no need to handle the 0 case because its an impossible case
         return false;
     }
+    private boolean Helper_find(K key) // Helper method for the insert.
+    { // normal Find method except that the compareTo method will return 0 if the objects are equal -1 if p.key is bigger and 1 if the key is bigger
+        BSTNode<K,T> p = root;
+        while (p != null)
+        {
+            int cmp = key.compareTo(p.key);
+            if (cmp == 0)
+            {
+                // Key found update 'current' and return true
+                current = p;
+                return true;
+            } else if (cmp < 0)
+            {
+                // Key is smaller than current key search left subtree
+                current = p;
+                p = p.left;
+            } else
+            {
+                // Key is greater than current key search right subtree
+                current = p; //
+                p = p.right;
+            }
+        }
+        // Key not found
+        return false;
+    }
 
     @Override
     public boolean remove(K key)
@@ -134,7 +160,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
     public DLLComp<K> getKeys()
     {
         // getting all keys in BST
-    DLLCompImp<K> tmp = new DLLCompImp<K>();
+    DLLComp<K> tmp = new DLLCompImp<>();
         HelperInserter(root , tmp);
         return tmp ;
     }
@@ -219,8 +245,4 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         }
         return p;
     }
-
-
-
-
 }

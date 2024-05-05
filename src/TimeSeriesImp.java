@@ -66,7 +66,7 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
     @Override
     public DLL<DataPoint<T>> getAllDataPoints() {
         DLL<DataPoint<T>> allDataPoints = new DLLImp<>();
-        DLLComp<Date> tmp = dataPoints.getKeys() ;
+        DLLComp<Date> tmp = dataPoints.getKeys();
         tmp.findFirst();
         while(!tmp.last()) { // Loop through all dates
             dataPoints.find(tmp.retrieve()) ;
@@ -77,8 +77,6 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
         dataPoints.find(tmp.retrieve()) ;
         DataPoint<T> tmpElement = dataPoints.current.data;
         allDataPoints.insert(tmpElement); // Insert each data point into the DLL
-        tmp.findNext();
-
         return allDataPoints;
     }
 
