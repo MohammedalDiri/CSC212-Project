@@ -94,7 +94,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
     public boolean insert(K key, T data)
     { // p was defined to keep the current original place after using find()
         BSTNode<K,T> p = current ;
-        if(find(key))
+        if(Helper_find(key))
         {
             current = p ;
             return false ;
