@@ -11,47 +11,54 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
 
     @Override
     public NumericTimeSeries calculateMovingAverage(int period)
-    { if(period <= 0 || TimeSeries.empty() )
-            return new NumericTimeSeriesImp();
+    {    if (period <= 0 || TimeSeries.empty())
+             return new NumericTimeSeriesImp(); // Return empty if invalid period or the series is empty.
 
-        NumericTimeSeries result = new NumericTimeSeriesImp();
-
+        NumericTimeSeriesImp result = new NumericTimeSeriesImp();
         DLL<DataPoint<Double>> allDataPoints = TimeSeries.getAllDataPoints();
-        int DataSize = allDataPoints.size();
+        int dataSize = allDataPoints.size();
 
-        if(DataSize < period) // If there is fewer data points than the period, return an empty series.
+        if (dataSize < period) // If there are fewer data points than the period, return an empty series.
             return result;
 
         allDataPoints.findFirst();
+        double sum = 0;
 
-        double sum = 0 ;
-        for(int i = 0 ; i < period ; i++) // // calc the sum with the first period data points
-        {
-                sum += allDataPoints.retrieve().value ;
-            if (i < period - 1)
+        // Calculate the sum with the first 'period' data points
+        for (int i = 0; i < period; i++) {
+            sum += allDataPoints.retrieve().value;
+            if (i < period - 1) // Prevent findNext on the last iteration
                 allDataPoints.findNext();
         }
 
-        // Calculate the first average and add it to the results
-        DataPoint<Double> currentDataPoint = allDataPoints.retrieve();
+        // Calculate the first average
         double average = sum / period;
-        result.addDataPoint(new DataPoint<Double>(currentDataPoint.date, average));
-
-
-        allDataPoints.findFirst();  // Start from the beginning of the list again
-        for (int i = 0; i < DataSize - period; i++) {
-            sum -= allDataPoints.retrieve().value;  // Subtract the element that's leaving the window
+        allDataPoints.findFirst();
+        for (int i = 0; i < period - 1; i++) // Navigate to the correct position for the date of the average
             allDataPoints.findNext();
-            allDataPoints.findNext();
-            currentDataPoint = allDataPoints.retrieve();
-            sum += currentDataPoint.value;
+        result.addDataPoint(new DataPoint<Double>(allDataPoints.retrieve().date, average));
 
-            average = sum / period;  // Calculate new average
-            result.addDataPoint(new DataPoint<Double>(currentDataPoint.date, average));
-            allDataPoints.findPrevious();  // Move back to the start of the window for the next iteration
+        // Move the window and calculate the moving average for the rest of the data points
+        allDataPoints.findFirst(); // Reset to the first element
+        for (int i = 0; i < dataSize - period; i++) {
+            allDataPoints.findNext(); // Move to the first element in the new window
+            sum -= allDataPoints.retrieve().value; // Subtract the value of the first element of the window
+
+            // Advance to the last element of the new window
+            for (int j = 0; j < period; j++)
+                allDataPoints.findNext();
+
+            sum += allDataPoints.retrieve().value; // Add the new element entering the window
+
+            // Navigate back to the correct position for the date of the next average
+            for (int k = 0; k < period - 1; k++)
+                allDataPoints.findPrevious();
+
+            average = sum / period;
+            result.addDataPoint(new DataPoint<Double>(allDataPoints.retrieve().date, average));
         }
-        return result ;
 
+        return result;
     }
 
     @Override
