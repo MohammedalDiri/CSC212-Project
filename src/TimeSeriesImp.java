@@ -1,9 +1,8 @@
-import javax.xml.crypto.Data;
 import java.util.Date;
 
 public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a set of data points in a DLL.
     // We know it's a DLL because of the method getAllDataPoints.
-    BST<Date, DataPoint<T>> dataPoints;
+    private BST<Date, DataPoint<T>> dataPoints;
 
     public TimeSeriesImp() {
         dataPoints = new BST<>();
@@ -17,6 +16,10 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
     @Override
     public boolean empty() {
         return dataPoints.empty(); // Check if the BST is empty
+    }
+
+    public void clear(){
+        dataPoints.clear(); // This was added for the Stock history implementation class.
     }
 
     @Override
