@@ -149,7 +149,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
     { // this was written by bader
 
         boolean[] removed = new boolean[1];
-        removed[0] = false;
+        removed[0] = false; // This array is made to pass "removed" by reference not value.
         BSTNode<K,T> p;
         p = helper_remove(key, root, removed); //here we used array to modify the value in the helper method
         root = p;
@@ -245,4 +245,19 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         }
         return p;
     }
+    public DLL<T> getData(){ // This method should help with the get data points method.
+        DLL<T> SortedPoints = new DLLImp<>();
+        getDataHelper( root, SortedPoints);
+        return SortedPoints;
+    }
+    private void getDataHelper( BSTNode<K,T> t, DLL<T> L){
+        if(t == null)
+            return;
+        else{
+            getDataHelper(t.left, L);
+            L.insert(t.data);
+            getDataHelper(t.right, L);
+        }
+    }
+
 }

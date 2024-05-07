@@ -31,7 +31,7 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
     public DLL<Date> getAllDates() {
         // Getting all keys from BST, which are the dates
         DLLComp<Date> dates = dataPoints.getKeys();
-        return dates;
+        return dates; // Could just return it straight away.
     }
 
     @Override
@@ -65,19 +65,21 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
 
     @Override
     public DLL<DataPoint<T>> getAllDataPoints() {
-        DLL<DataPoint<T>> allDataPoints = new DLLImp<>();
-        DLLComp<Date> tmp = dataPoints.getKeys();
-        tmp.findFirst();
-        while(!tmp.last()) { // Loop through all dates
-            dataPoints.find(tmp.retrieve()) ;
-            DataPoint<T> tmpElement = dataPoints.current.data;
-            allDataPoints.insert(tmpElement); // Insert each data point into the DLL
-            tmp.findNext();
-        }
-        dataPoints.find(tmp.retrieve()) ;
-        DataPoint<T> tmpElement = dataPoints.current.data;
-        allDataPoints.insert(tmpElement); // Insert each data point into the DLL
-        return allDataPoints;
+//        DLL<DataPoint<T>> allDataPoints = new DLLImp<>();
+//        DLLComp<Date> tmp = dataPoints.getKeys();
+//        tmp.findFirst();
+//        while(!tmp.last()) { // Loop through all dates
+//            dataPoints.find(tmp.retrieve());
+//            DataPoint<T> tmpElement = dataPoints.current.data;
+//            allDataPoints.insert(tmpElement); // Insert each data point into the DLL
+//            tmp.findNext();
+//        }
+//        dataPoints.find(tmp.retrieve()) ;
+//        DataPoint<T> tmpElement = dataPoints.current.data;
+//        allDataPoints.insert(tmpElement); // Insert each data point into the DLL
+//        return allDataPoints;
+
+        return dataPoints.getData(); // Way better Time comp, check the BST class for details.
     }
 
     @Override
@@ -91,13 +93,14 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
             return pointsInRange;
 
         DLLComp<Date> tmp = dataPoints.getKeys() ;
+        DLL<DataPoint<T>> SortedData = dataPoints.getData();
         tmp.findFirst();
+        SortedData.findFirst();
         while(!tmp.last()) {
-            dataPoints.find(tmp.retrieve()) ;
-            DataPoint<T> tmpElement = dataPoints.current.data;
             if ( (tmp.retrieve().compareTo(startDate) >= 0 && tmp.retrieve().compareTo(endDate) <= 0) )
-                      pointsInRange.insert(tmpElement); // Insert data points within the specified range
+                      pointsInRange.insert(SortedData.retrieve()); // Insert data points within the specified range
             tmp.findNext();
+            SortedData.findNext(); // Both lists are sorted, and their pointers move together with each iteration.
         }
         return pointsInRange;
     }
