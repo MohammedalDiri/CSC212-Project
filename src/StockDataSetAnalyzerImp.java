@@ -51,6 +51,7 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
             DLL<DataPoint<StockData>> allDataPointsInRange = tmpSeries.getDataPointsInRange(startDate, endDate) ;
         }
         //this is not finished i just gave up on it midWay , the 3 methods are same and the
+        // this is a test i dont know what i am doing vroom vroom
     return FinalCompanies ;
     }
 
