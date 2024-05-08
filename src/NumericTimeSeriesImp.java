@@ -8,7 +8,7 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
         TimeSeries = new TimeSeriesImp<Double>();
     }
 
-
+//This is Just a TEST for this commit
     @Override
     public NumericTimeSeries calculateMovingAverage(int period)
     {    if (period <= 0 || TimeSeries.empty())
