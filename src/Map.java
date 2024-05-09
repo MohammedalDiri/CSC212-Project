@@ -35,4 +35,7 @@ public interface Map<K extends Comparable<K>, T> {
 
 	// Return all keys in the map as a list sorted in increasing order.
 	DLLComp<K> getKeys();
+
+	//// Return all Data in the map as a list sorted in increasing order.
+	DLLImp<T> getData() ;
 }

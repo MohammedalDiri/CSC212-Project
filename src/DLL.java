@@ -18,6 +18,8 @@ public interface DLL<T> {
 	// specification seen in class).
 	void findFirst();
 
+	DLLNode<T> getLast();
+
 	// Advances the current position to the next element in the list (detailed
 	// specification seen in class).
 	void findNext();

@@ -30,33 +30,36 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
        if(SDSAI.getStockHistoryMap().empty() || startDate == null || endDate == null)
            return FinalCompanies ;
 
-       DLLComp<String> AllCompaniesCodes = SDSAI.getAllCompanyCodes() ;
-       AllCompaniesCodes.findFirst();
-        for(int i = 0 ; i < AllCompaniesCodes.size() ; i++)
+
+        DLLImp<StockHistory> AllCompaniesStockHistory = SDSAI.getAllCompanyStockHistory() ;
+
+        AllCompaniesStockHistory.findFirst();
+        for(int i = 0 ; i < AllCompaniesStockHistory.size() ; i++)
         {
-            String companyCode = AllCompaniesCodes.retrieve();
-            if (SDSAI.getStockHistoryMap().find(companyCode)) {
-                StockHistory currentCompany = SDSAI.getStockHistoryMap().retrieve();
+                StockHistory currentCompany = AllCompaniesStockHistory.retrieve();
+                String CurrentCompanyCode = currentCompany.getCompanyCode() ;
                 TimeSeries<StockData> tmpSeries = currentCompany.getTimeSeries();
                 DLL<DataPoint<StockData>> allDataPointsInRange = tmpSeries.getDataPointsInRange(startDate, endDate);
 
-                if (allDataPointsInRange.size() > 1) {
+                if (allDataPointsInRange.size() > 1)
+                {
                     allDataPointsInRange.findFirst();
-                    double startPrice = allDataPointsInRange.retrieve().value.open; // Price at the start of the date range
+                    double startPrice = allDataPointsInRange.retrieve().value.close; // Price at the start of the date range
 
                     double endPrice = 0.0;
-                    while (!allDataPointsInRange.last()) {
-                        allDataPointsInRange.findNext(); // Move to the next node
-                    }
-                    endPrice = allDataPointsInRange.retrieve().value.close; // Price at the end of the date range
+
+
+
+                    endPrice = allDataPointsInRange.getLast().data.value.close; // Price at the end of the date range
 
                     double performance = ((endPrice - startPrice) / startPrice) * 100;
-                    FinalCompanies.insert(new CompPair<>(companyCode, performance));
+                    FinalCompanies.insert(new CompPair<>(currentCompany.getCompanyCode(), performance));
                 }
+                AllCompaniesStockHistory.findNext();
             }
-        }
 
 
+    FinalCompanies.sort(true);
     return FinalCompanies ;
     }
 

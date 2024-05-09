@@ -42,6 +42,12 @@ public class StockHistoryDataSetImp implements StockHistoryDataSet
             return null;
         return SHDSI.getKeys() ;
     }
+    public DLLImp<StockHistory> getAllCompanyStockHistory()
+    {
+        if(SHDSI.empty())
+            return null;
+        return SHDSI.getData() ;
+    }
 
     @Override
     public StockHistory getStockHistory(String companyCode)

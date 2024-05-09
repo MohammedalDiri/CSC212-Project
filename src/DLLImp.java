@@ -1,6 +1,7 @@
 public class DLLImp<T> implements DLL<T>{
     private DLLNode<T> head;
     private DLLNode<T> current;
+    private DLLNode<T> tail ;
     private int ListSize;
 
     public DLLImp() {
@@ -54,7 +55,7 @@ public class DLLImp<T> implements DLL<T>{
     @Override
     public void insert(T val) {
         if(head == null)
-            head = current = new DLLNode<T>(val);
+            head = tail = current = new DLLNode<T>(val);
         else{
             DLLNode<T> tmp = new DLLNode<T>(val);
             tmp.next = current.next;
@@ -64,6 +65,8 @@ public class DLLImp<T> implements DLL<T>{
 
             current.next = tmp;
             current = tmp;
+            if(current.next == null)
+                tail = current;
         }
         ListSize++;
     }
@@ -78,6 +81,8 @@ public class DLLImp<T> implements DLL<T>{
             current.prev.next = current.next;
             if (current.next != null)
                 current.next.prev = current.prev;
+            else
+                tail = tail.prev;
         }
         if (last())
             current = head;
@@ -87,4 +92,6 @@ public class DLLImp<T> implements DLL<T>{
         ListSize--;
     }
 
+    public DLLNode<T> getLast()
+    {return tail ;}
 }

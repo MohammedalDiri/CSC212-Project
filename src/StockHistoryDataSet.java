@@ -16,6 +16,8 @@ public interface StockHistoryDataSet {
 	// increasing order.
 	DLLComp<String> getAllCompanyCodes();
 
+	public DLLImp<StockHistory> getAllCompanyStockHistory();
+
 	// Retrieves the stock history for a specific company code. This method returns
 	// null if no data is found.
 	StockHistory getStockHistory(String companyCode);

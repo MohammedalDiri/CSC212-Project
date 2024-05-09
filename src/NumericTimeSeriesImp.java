@@ -18,35 +18,35 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
         DLL<DataPoint<Double>> allDataPoints = TimeSeries.getAllDataPoints();
         int dataSize = allDataPoints.size();
 
-        if (dataSize < period) // If there are fewer data points than the period, return an empty series.
+        if (dataSize < period) // If there are fewer data points than the period return an empty series.
             return result;
 
         allDataPoints.findFirst();
         double sum = 0;
-        // Calculate the sum with the first 'period' data points
+        // calc the sum with first period data points
         for (int i = 0; i < period; i++) {
             sum += allDataPoints.retrieve().value;
             if (i < period - 1) // Prevent findNext on the last iteration
                 allDataPoints.findNext();
         }
-        // Calculate the first average
+        // calc the first average
         double average = sum / period;
         result.addDataPoint(new DataPoint<Double>(allDataPoints.retrieve().date, average));
 
-        // Move the window and calculate the moving average for the rest of the data points
-        allDataPoints.findFirst(); // Reset to the first element
+        // move the window and calculate the moving average for the rest of the data points
+        allDataPoints.findFirst(); // reset to the first element
         for (int i = 0; i < dataSize - period; i++) {
-            sum -= allDataPoints.retrieve().value; // Subtract the value of the first element of the window
+            sum -= allDataPoints.retrieve().value; // subtracting the value of the first element of the window
 
-            for (int j = 0; j < period; j++) // Advance to the last element of the new window
+            for (int j = 0; j < period; j++) // advancing to the last element of the new window
                 allDataPoints.findNext();
 
-            sum += allDataPoints.retrieve().value; // Add the new element entering the window
+            sum += allDataPoints.retrieve().value; // add the new element entering the window
 
             average = sum / period;
             result.addDataPoint(new DataPoint<Double>(allDataPoints.retrieve().date, average));
 
-            // Navigate back to the correct position for the date of the next average
+            // navigate back to the correct position for the date of the next average
             for (int k = 0; k < period - 1; k++)
                 allDataPoints.findPrevious();
         }

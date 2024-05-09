@@ -3,11 +3,13 @@ import org.w3c.dom.Node;
 public class BST<K extends Comparable<K>, T> implements Map<K, T> {
     BSTNode<K,T> root ;
     BSTNode<K,T>  current ;
+    int size ;
 
 
     public BST()
     {
         root = current = null;
+        size = 0 ;
     }
 
 
@@ -103,16 +105,19 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         if(empty())
         {
             root = current = q ;
+            size++ ;
             return true ;
         }
         int cmp = key.compareTo(current.key);
         if(cmp < 0)
         { current.left = q ;
+            size++ ;
             return true ;
         }
         else if(cmp > 0)
         {
             current.right = q;
+            size++ ;
             return true ;
         } // no need to handle the 0 case because its an impossible case
         return false;
@@ -166,7 +171,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
     }
 
     public int size() // will return the size of the tree
-    { return HelperCounter(root) ; }
+    { return size ; }
 
   private int HelperCounter(BSTNode<K,T> node) //this method is going to count each node in the tree
   {
@@ -226,6 +231,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         else if(key.compareTo(p.key) > 0)
             p.right = helper_remove(key, p.right, flag); //go right
         else {
+            size-- ;
             flag[0] = true;
             if (p.left != null && p.right != null)
             { //two children
@@ -245,12 +251,12 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         }
         return p;
     }
-    public DLL<T> getData(){ // This method should help with the get data points method.
-        DLL<T> SortedPoints = new DLLImp<>();
+    public DLLImp<T> getData(){ // This method should help with the get data points method.
+        DLLImp<T> SortedPoints = new DLLImp<>();
         getDataHelper( root, SortedPoints);
         return SortedPoints;
     }
-    private void getDataHelper( BSTNode<K,T> t, DLL<T> L){
+    private void getDataHelper( BSTNode<K,T> t, DLLImp<T> L){
         if(t == null)
             return;
         else{
