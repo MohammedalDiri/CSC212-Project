@@ -32,7 +32,7 @@ public class StockHistoryDataSetImp implements StockHistoryDataSet
         if(SHDSI.empty())
             return null;
 
-        return SHDSI;           // will return our StockHistoryDataSet
+        return SHDSI;  // will return our StockHistoryDataSet
     }
 
     @Override

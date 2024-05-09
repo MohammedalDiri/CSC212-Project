@@ -54,20 +54,12 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
     }
 
     @Override
-    public DataPoint<Double> getMax() // Could be better..
+    public DataPoint<Double> getMax() // Made it better..
     {
         if(TimeSeries.empty())
          return null;
         DLL<DataPoint<Double>> tmp = TimeSeries.getAllDataPoints();
-
-        tmp.findFirst(); ;
-
-        DataPoint<Double> max = tmp.retrieve() ;
-        while(!tmp.last())
-        {
-            tmp.findNext();
-        }
-        return tmp.retrieve();
+        return tmp.getLast().data;
     }
 
     @Override
