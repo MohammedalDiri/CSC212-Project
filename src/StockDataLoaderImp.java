@@ -1,30 +1,36 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.Date;
 import java.util.Scanner;
+
+
 public class StockDataLoaderImp implements StockDataLoader {
 
-    Map<String, StockHistoryDataSetImp> dataSet;
+    Map<String, StockHistoryDataSetImp> ds;
 
-    public StockDataLoaderImp()
-    {
-        dataSet = new BST<String, StockHistoryDataSetImp>();
+    public StockDataLoaderImp(){
+        ds = new BST<String, StockHistoryDataSetImp>();
     }
-    public StockHistory loadStockDataFile(String fileName)
-    {
-        StockHistory SH = new StockHistoryImp();
-        Date oldDate = new Date ("1/1/1900");
+
+    // Loads and adds stock history from the specified CSV file. The code of the
+    // company is the basename of the file. This method returns null if the
+    // operation is not successful. Errors include, non-existing file, incorrect
+    // format, repeated dates, dates not sorted in increasing order, etc.
+    public StockHistory loadStockDataFile(String fileName){
+        StockHistory sh = new StockHistoryImp();
+        Date od = new Date("1/1/1900");
 
         try{
-            File file = new File(fileName);
-            SH.SetCompanyCode(file.getName().substring(0,  file.getName().indexOf(".csv")));
-            Scanner reader = new Scanner (file);
+            File f = new File(fileName);
+            sh.SetCompanyCode(f.getName().substring(0, f.getName().indexOf(".csv")));
+            Scanner reader = new Scanner (f);
             reader.useDelimiter(",");
 
-            String line = reader.nextLine();
-            while(reader.hasNext())
-            {
-                line = reader.nextLine();
-                String [] values = line.split(",");
+            String l = reader.nextLine();
+            while(reader.hasNext()){
+                l = reader.nextLine();
+                String [] values = l.split(",");
                 String [] d = values[0].split("-");
 
                 Date date = new Date (d[0]+"/"+d[1]+"/"+d[2]);
@@ -32,16 +38,16 @@ public class StockDataLoaderImp implements StockDataLoader {
                 Double high = Double.parseDouble(values[2]);
                 Double low = Double.parseDouble(values[3]);
                 Double close = Double.parseDouble(values[4]);
-                long volume = Long.parseLong(values[5]);
+                Long volume = Long.parseLong(values[5]);
 
-                StockData SD = new StockData(open, high, low, close, volume);
-                if (! SH.addStockData(date , SD))
+                StockData SD = new StockData(open, close, high, low, volume);
+                if (! sh.addStockData(date , SD))
                     throw new Exception();
 
-                if (date.compareTo(oldDate) < 0)
+                if (date.compareTo(od) < 0)
                     throw new Exception();
 
-                date = oldDate;
+                date = od;
             }
             reader.close();
         }
@@ -49,31 +55,28 @@ public class StockDataLoaderImp implements StockDataLoader {
             System.out.println(ex.getMessage());
             return null;
         }
-        return SH;
+        return sh;
     }
 
     // Loads and returns stock history data from all CSV files in the specified
     // directory. This method returns null if the operation is not successful (see
     // possible errors in the method loadStockDataFile).
-    public StockHistoryDataSet loadStockDataDir(String directoryPath)
-    {
-        StockHistoryDataSet dataSet = new StockHistoryDataSetImp ();
-        try
-        {
-            final File folder = new File(directoryPath);
-            for (final File fileEntry : folder.listFiles())
+    public StockHistoryDataSet loadStockDataDir(String directoryPath){
+        StockHistoryDataSet dataSet = new StockHistoryDataSetImp();
+        try{
+            final File f = new File(directoryPath);
+            for (final File ft : f.listFiles())
             {
-                if(fileEntry.getName().contains(".csv"))
+                if(ft.getName().contains(".csv"))
                 {
-                    StockHistory SH = loadStockDataFile(fileEntry.getPath());
+                    StockHistory SH = loadStockDataFile(ft.getPath());
                     if ( (SH == null) || ! dataSet.addStockHistory(SH))
                         throw new Exception();
                 }
 
             }
         }
-        catch(Exception e)
-        {
+        catch(Exception e){
             return null;
         }
         return dataSet;
@@ -82,4 +85,4 @@ public class StockDataLoaderImp implements StockDataLoader {
 
 
 
-}  
+}

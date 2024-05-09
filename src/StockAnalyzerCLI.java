@@ -71,7 +71,7 @@ public class StockAnalyzerCLI {
 		// Initialize StockDataLoader
 		StockDataLoader loader = new StockDataLoaderImp();
 		// Load stock data for Google
-		StockHistory googleStockHistory = loader.loadStockDataFile("/Users/mohammedaldiri/Desktop/GOOGL.csv");
+		StockHistory googleStockHistory = loader.loadStockDataFile("/Users/mohammedaldiri/Desktop/real/GOOGL.csv");
 
 		// Choose a start date and an end date
 		Date startDate;
@@ -96,7 +96,7 @@ public class StockAnalyzerCLI {
 		System.out.println("Google's traded volume on " + dateFormat.format(endDate) + ": " + sd.volume);
 
 		// Load all files from the directory data
-		StockHistoryDataSet dataSet = loader.loadStockDataDir("data/real");
+		StockHistoryDataSet dataSet = loader.loadStockDataDir("/Users/mohammedaldiri/Desktop/real");
 		// Initialize StockDataSetAnalyzer
 		StockDataSetAnalyzer analyzer = new StockDataSetAnalyzerImp();
 		analyzer.setStockHistoryDataSet(dataSet);

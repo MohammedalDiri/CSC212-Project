@@ -105,6 +105,10 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
             tmp.findNext();
             SortedData.findNext(); // Both lists are sorted, and their pointers move together with each iteration.
         }
+        if ( (tmp.retrieve().compareTo(startDate) >= 0 && tmp.retrieve().compareTo(endDate) <= 0) )
+            pointsInRange.insert(SortedData.retrieve()); // Insert data points within the specified range
+        tmp.findNext();
+        SortedData.findNext(); // Both lists are sorted, and their pointers move together with each iteration.
         return pointsInRange;
     }
 }

@@ -49,7 +49,7 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
 
                     endPrice = allDataPointsInRange.getLast().data.value.close; // Price at the end of the date range
 
-                    double performance = ((endPrice - startPrice) / startPrice) * 100;
+                    double performance = ((endPrice - startPrice) / startPrice) ;
                     FinalCompanies.insert(new CompPair<>(currentCompany.getCompanyCode(), performance));
                 }
                 AllCompaniesStockHistory.findNext();
