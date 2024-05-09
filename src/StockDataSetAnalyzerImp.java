@@ -21,37 +21,42 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
         this.SDSAI = stockHistoryDataSet ;
     }
 
+    // this is a bomb method im not sure at all about it
     @Override
     public DLLComp<CompPair<String, Double>> getSortedByPerformance(Date startDate, Date endDate)
     {
         DLLComp<CompPair<String, Double>> FinalCompanies = new DLLCompImp<>() ;
-       if( startDate == null || endDate == null )
-            return null;
 
-       if(SDSAI.getStockHistoryMap().empty())
+       if(SDSAI.getStockHistoryMap().empty() || startDate == null || endDate == null)
            return FinalCompanies ;
 
        DLLComp<String> AllCompaniesCodes = SDSAI.getAllCompanyCodes() ;
        AllCompaniesCodes.findFirst();
-       while(!AllCompaniesCodes.last())
-       {
-           if(SDSAI.getStockHistoryMap().find(AllCompaniesCodes.retrieve())) // current will be in the right company
-           {
-               StockHistory CurrentCompany = SDSAI.getStockHistoryMap().retrieve() ;
-               TimeSeries<StockData> tmpSeries = CurrentCompany.getTimeSeries() ;
-               DLL<DataPoint<StockData>> allDataPointsInRange = tmpSeries.getDataPointsInRange(startDate, endDate) ;
-           }
-
-
-       }
-        if(SDSAI.getStockHistoryMap().find(AllCompaniesCodes.retrieve())) // current will be in the right company
+        for(int i = 0 ; i < AllCompaniesCodes.size() ; i++)
         {
-            StockHistory CurrentCompany = SDSAI.getStockHistoryMap().retrieve() ;
-            TimeSeries<StockData> tmpSeries = CurrentCompany.getTimeSeries() ;
-            DLL<DataPoint<StockData>> allDataPointsInRange = tmpSeries.getDataPointsInRange(startDate, endDate) ;
+            String companyCode = AllCompaniesCodes.retrieve();
+            if (SDSAI.getStockHistoryMap().find(companyCode)) {
+                StockHistory currentCompany = SDSAI.getStockHistoryMap().retrieve();
+                TimeSeries<StockData> tmpSeries = currentCompany.getTimeSeries();
+                DLL<DataPoint<StockData>> allDataPointsInRange = tmpSeries.getDataPointsInRange(startDate, endDate);
+
+                if (allDataPointsInRange.size() > 1) {
+                    allDataPointsInRange.findFirst();
+                    double startPrice = allDataPointsInRange.retrieve().value.open; // Price at the start of the date range
+
+                    double endPrice = 0.0;
+                    while (!allDataPointsInRange.last()) {
+                        allDataPointsInRange.findNext(); // Move to the next node
+                    }
+                    endPrice = allDataPointsInRange.retrieve().value.close; // Price at the end of the date range
+
+                    double performance = ((endPrice - startPrice) / startPrice) * 100;
+                    FinalCompanies.insert(new CompPair<>(companyCode, performance));
+                }
+            }
         }
-        //this is not finished i just gave up on it midWay , the 3 methods are same and the
-        // this is a test i dont know what i am doing vroom vroom
+
+
     return FinalCompanies ;
     }
 
