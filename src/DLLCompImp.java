@@ -1,6 +1,7 @@
 public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
     private DLLNode<T> head;
     private DLLNode<T> current;
+    private DLLNode<T> tail ;
     private int ListSize;
     private boolean increasing;
     private boolean isSorted = false;
@@ -22,7 +23,7 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
 
     @Override
     public boolean last() {
-        return current.next == null;
+        return current == tail ;
     }
 
     @Override
@@ -46,11 +47,7 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
     }
 
     private T LastElement() {
-        DLLNode<T> tmp = head;
-        while (tmp.next != null)
-            tmp = tmp.next;
-
-        return tmp.data;
+        return tail.data;
     }
 
     @Override
@@ -65,17 +62,19 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
 
     @Override
     public void insert(T val) {
-        if (head == null)
-            head = current = new DLLNode<T>(val);
-        else {
+        if(head == null)
+            head = tail = current = new DLLNode<T>(val);
+        else{
             DLLNode<T> tmp = new DLLNode<T>(val);
             tmp.next = current.next;
             tmp.prev = current;
-            if (current.next != null)
+            if(current.next != null)
                 current.next.prev = tmp;
 
             current.next = tmp;
             current = tmp;
+            if(current.next == null)
+                tail = current;
         }
         ListSize++;
     }
@@ -90,6 +89,8 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
             current.prev.next = current.next;
             if (current.next != null)
                 current.next.prev = current.prev;
+            else
+                tail = tail.prev;
         }
         if (last())
             current = head;
@@ -98,6 +99,7 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
 
         ListSize--;
     }
+
 
     @Override
     public void sort(boolean increasing) { // In this method merge sort will be used, as each element in the list will be inserted into an array where the sort will be done.
@@ -202,4 +204,8 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
         for (k = 0; k < B.length; k++)
             A[k + l] = B[k];
     }
+
+
+    public DLLNode<T> getLast()
+    {return tail ;}
 }

@@ -71,7 +71,7 @@ public class StockAnalyzerCLI {
 		// Initialize StockDataLoader
 		StockDataLoader loader = new StockDataLoaderImp();
 		// Load stock data for Google
-		StockHistory googleStockHistory = loader.loadStockDataFile("data/real/GOOGL.csv");
+		StockHistory googleStockHistory = loader.loadStockDataFile("/Users/mohammedaldiri/Desktop/GOOGL.csv");
 
 		// Choose a start date and an end date
 		Date startDate;
