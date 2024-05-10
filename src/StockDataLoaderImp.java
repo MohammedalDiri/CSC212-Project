@@ -7,10 +7,10 @@ import java.util.Scanner;
 
 public class StockDataLoaderImp implements StockDataLoader {
 
-    Map<String, StockHistoryDataSetImp> ds;
+    Map<String, StockHistoryDataSetImp> SDL;
 
     public StockDataLoaderImp(){
-        ds = new BST<String, StockHistoryDataSetImp>();
+        SDL = new BST<String, StockHistoryDataSetImp>();
     }
 
     // Loads and adds stock history from the specified CSV file. The code of the
@@ -18,12 +18,12 @@ public class StockDataLoaderImp implements StockDataLoader {
     // operation is not successful. Errors include, non-existing file, incorrect
     // format, repeated dates, dates not sorted in increasing order, etc.
     public StockHistory loadStockDataFile(String fileName){
-        StockHistory sh = new StockHistoryImp();
-        Date od = new Date("1/1/1900");
+        StockHistory SH = new StockHistoryImp();
+        Date d1 = new Date("1/1/1900");
 
         try{
             File f = new File(fileName);
-            sh.SetCompanyCode(f.getName().substring(0, f.getName().indexOf(".csv")));
+            SH.SetCompanyCode(f.getName().substring(0, f.getName().indexOf(".csv")));
             Scanner reader = new Scanner (f);
             reader.useDelimiter(",");
 
@@ -41,13 +41,13 @@ public class StockDataLoaderImp implements StockDataLoader {
                 Long volume = Long.parseLong(values[5]);
 
                 StockData SD = new StockData(open, close, high, low, volume);
-                if (! sh.addStockData(date , SD))
+                if (! SH.addStockData(date , SD))
                     throw new Exception();
 
-                if (date.compareTo(od) < 0)
+                if (date.compareTo(d1) < 0)
                     throw new Exception();
 
-                date = od;
+                date = d1;
             }
             reader.close();
         }
@@ -55,7 +55,7 @@ public class StockDataLoaderImp implements StockDataLoader {
             System.out.println(ex.getMessage());
             return null;
         }
-        return sh;
+        return SH;
     }
 
     // Loads and returns stock history data from all CSV files in the specified
