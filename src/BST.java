@@ -19,7 +19,10 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
 
     @Override
     public void clear()
-    {root = null ;} // this will simple clear the whole tree , garbage collector will clean up these unreferenced nodes
+    {
+        root = null ;
+        size = 0 ;
+    } // this will simple clear the whole tree , garbage collector will clean up these unreferenced nodes
 
 
     public T retrieve ()
