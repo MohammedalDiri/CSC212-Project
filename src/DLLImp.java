@@ -1,7 +1,7 @@
-public class DLLImp<T> implements DLL<T>{
+public class DLLImp<T> implements DLL<T> {
     private DLLNode<T> head;
     private DLLNode<T> current;
-    private DLLNode<T> tail ;
+    private DLLNode<T> tail;
     private int ListSize;
 
     public DLLImp() {
@@ -40,7 +40,9 @@ public class DLLImp<T> implements DLL<T>{
     }
 
     @Override
-    public void findPrevious() { current = current.prev ; }
+    public void findPrevious() {
+        current = current.prev;
+    }
 
     @Override
     public T retrieve() {
@@ -54,18 +56,18 @@ public class DLLImp<T> implements DLL<T>{
 
     @Override
     public void insert(T val) {
-        if(head == null)
+        if (head == null)
             head = tail = current = new DLLNode<T>(val);
-        else{
+        else {
             DLLNode<T> tmp = new DLLNode<T>(val);
             tmp.next = current.next;
             tmp.prev = current;
-            if(current.next != null)
+            if (current.next != null)
                 current.next.prev = tmp;
 
             current.next = tmp;
             current = tmp;
-            if(current.next == null)
+            if (current.next == null)
                 tail = current;
         }
         ListSize++;
@@ -92,6 +94,19 @@ public class DLLImp<T> implements DLL<T>{
         ListSize--;
     }
 
-    public DLLNode<T> getLast()
-    {return tail ;}
+    public DLLNode<T> getLast() {
+        return tail;
+    }
+
+    public static <T> void display(DLL<T> L) {
+        if (L.empty())
+            return;
+        L.findFirst();
+        while (!L.last()) {
+            System.out.println(L.retrieve() + " ");
+            L.findNext();
+        }
+        System.out.println(L.retrieve());
+        System.out.println("num of existing elements=" + L.size());
+    }
 }

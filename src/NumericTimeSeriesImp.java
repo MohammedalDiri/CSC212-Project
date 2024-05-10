@@ -175,7 +175,20 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
     {
       return TimeSeries.getDataPointsInRange(startDate, endDate) ;
     }
+    public void display() {
+        ((TimeSeriesImp) TimeSeries).display();
 
+    }
+
+    public void display_stock_history() {
+        ((TimeSeriesImp) TimeSeries).display_stock_history();
+    }
+
+
+    public static void display(DLL<Date> L) {
+        TimeSeriesImp.display(L);
+
+    }
 
 
 

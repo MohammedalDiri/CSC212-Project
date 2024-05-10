@@ -19,5 +19,5 @@ public class DataPoint<T> {
 	public String toString() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // The simple format is available because of the import of SimpleDateFormat.
 		return dateFormat.format(date) + " : " + value.toString(); // As we already said the value refers stock data, so we may need to implement a display method in StockData.
- 	}
+	}
 }

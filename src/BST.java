@@ -255,14 +255,35 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         getDataHelper( root, SortedPoints);
         return SortedPoints;
     }
-    private void getDataHelper( BSTNode<K,T> t, DLLImp<T> L){
-        if(t == null)
+    private void getDataHelper( BSTNode<K,T> t, DLLImp<T> L) {
+        if (t == null)
             return;
-        else{
+        else {
             getDataHelper(t.left, L);
             L.insert(t.data);
             getDataHelper(t.right, L);
         }
     }
 
-}
+        public void displayAllNodesInOrder() {
+            if (root == null)
+                System.out.println("empty map");
+            else {
+                displayAllNodesInOrder(root);
+            }
+            System.out.println();
+        }
+
+        private void displayAllNodesInOrder(BSTNode<K, T> p) {
+            if (p != null) {
+                displayAllNodesInOrder(p.left);
+                System.out.println(p.key + " " + p.data + ", ");
+                displayAllNodesInOrder(p.right);
+            }
+        }
+
+
+    }
+
+
+
