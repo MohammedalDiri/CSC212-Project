@@ -1,9 +1,7 @@
-import org.w3c.dom.Node;
-
 public class BST<K extends Comparable<K>, T> implements Map<K, T> {
-    BSTNode<K,T> root ;
-    BSTNode<K,T>  current ;
-    int size ;
+    private BSTNode<K,T> root ;
+    private BSTNode<K,T>  current ;
+    private int size ;
 
 
     public BST()
@@ -173,14 +171,6 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
     public int size() // will return the size of the tree
     { return size ; }
 
-  private int HelperCounter(BSTNode<K,T> node) //this method is going to count each node in the tree
-  {
-    if(node == null)
-        return 0;
-    int left = HelperCounter(node.left) ;
-    int right = HelperCounter(node.right) ;
-     return 1 + left + right ;
-  }
 
     private void HelperInserter(BSTNode<K, T> node, DLLComp<K> tmp)
     {
@@ -194,7 +184,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         HelperInserter(node.right, tmp); // handling right subtree
     }
 
-    public BSTNode<K,T> find_min(BSTNode<K,T> p)
+    private BSTNode<K,T> Helperfind_min(BSTNode<K,T> p)
     { // this was written by bader
         // helper method to find the minimum value
         if(p == null)
@@ -207,7 +197,11 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
 
         return p;
     }
-    public BSTNode<K,T> find_max(BSTNode<K,T> p)
+
+    public BSTNode<K,T> find_min()
+    {return Helperfind_min(root);}
+
+    private BSTNode<K,T> Helperfind_max(BSTNode<K,T> p)
     {
         if(p == null)
             return null;
@@ -219,6 +213,8 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
 
         return p;
     }
+    public BSTNode<K,T> find_max()
+    {return Helperfind_max(root);}
 
     private BSTNode<K,T> helper_remove(K key, BSTNode<K, T> p, boolean[] flag)
     { // this was written by bader
@@ -235,7 +231,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
             flag[0] = true;
             if (p.left != null && p.right != null)
             { //two children
-                q = find_min(p.right);
+                q = Helperfind_min(p.right);
                 p.key = q.key;
                 p.data = q.data;
                 p.right = helper_remove(q.key, p.right, flag);

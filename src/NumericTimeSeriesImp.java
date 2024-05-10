@@ -14,7 +14,7 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
     {    if (period <= 0 || TimeSeries.empty())
              return new NumericTimeSeriesImp(); // Return empty if invalid period or the series is empty.
 
-        NumericTimeSeriesImp result = new NumericTimeSeriesImp();
+        NumericTimeSeries result = new NumericTimeSeriesImp();
         DLL<DataPoint<Double>> allDataPoints = TimeSeries.getAllDataPoints();
         int dataSize = allDataPoints.size();
 
@@ -54,23 +54,52 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
     }
 
     @Override
-    public DataPoint<Double> getMax() // Made it better..
+    public DataPoint<Double> getMax()
     {
         if(TimeSeries.empty())
-         return null;
+            return null;
         DLL<DataPoint<Double>> tmp = TimeSeries.getAllDataPoints();
-        return tmp.getLast().data;
+        tmp.findFirst();
+        DataPoint<Double> maxPoint = tmp.retrieve();
+        Double max = tmp.retrieve().value;
+        tmp.findNext();
+        while(!tmp.last()){
+            if(tmp.retrieve().value > max){
+                maxPoint = tmp.retrieve();
+                max = tmp.retrieve().value;
+            }
+            tmp.findNext();
+        }
+        if(tmp.retrieve().value > max){
+            maxPoint = tmp.retrieve();
+            max = tmp.retrieve().value;
+        }
+        return maxPoint ;
     }
 
     @Override
     public DataPoint<Double> getMin()
     {
         if(TimeSeries.empty())
-            return null;
+                return null;
 
         DLL<DataPoint<Double>> tmp = TimeSeries.getAllDataPoints();
         tmp.findFirst();
-        return tmp.retrieve();
+        DataPoint<Double> minPoint = tmp.retrieve();
+        Double min = tmp.retrieve().value;
+        tmp.findNext();
+        while(!tmp.last()){
+            if(tmp.retrieve().value < min){
+                minPoint = tmp.retrieve();
+                min = tmp.retrieve().value;
+            }
+            tmp.findNext();
+        }
+        if(tmp.retrieve().value < min){
+            minPoint = tmp.retrieve();
+            min = tmp.retrieve().value;
+        }
+        return minPoint;
     }
 
     @Override

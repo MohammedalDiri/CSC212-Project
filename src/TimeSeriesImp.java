@@ -39,12 +39,12 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
 
     @Override
     public Date getMinDate() {
-        return (dataPoints.find_min(dataPoints.root).key) ; // Find the minimum date in BST
+        return (dataPoints.find_min().key) ; // Find the minimum date in BST
     }
 
     @Override
     public Date getMaxDate() {
-        return (dataPoints.find_max(dataPoints.root).key) ;  // Find the maximum date in BST
+        return (dataPoints.find_max().key) ;  // Find the maximum date in BST
     }
 
     @Override
@@ -68,19 +68,7 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
 
     @Override
     public DLL<DataPoint<T>> getAllDataPoints() {
-//        DLL<DataPoint<T>> allDataPoints = new DLLImp<>();
-//        DLLComp<Date> tmp = dataPoints.getKeys();
-//        tmp.findFirst();
-//        while(!tmp.last()) { // Loop through all dates
-//            dataPoints.find(tmp.retrieve());
-//            DataPoint<T> tmpElement = dataPoints.current.data;
-//            allDataPoints.insert(tmpElement); // Insert each data point into the DLL
-//            tmp.findNext();
-//        }
-//        dataPoints.find(tmp.retrieve()) ;
-//        DataPoint<T> tmpElement = dataPoints.current.data;
-//        allDataPoints.insert(tmpElement); // Insert each data point into the DLL
-//        return allDataPoints;
+
 
         return dataPoints.getData(); // Way better Time comp, check the BST class for details.
     }
@@ -88,12 +76,13 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
     @Override
     public DLL<DataPoint<T>> getDataPointsInRange(Date startDate, Date endDate) {
         DLL<DataPoint<T>> pointsInRange = new DLLImp<>();
+        if(dataPoints.empty())
+            return pointsInRange;
         if (startDate == null)
             startDate = getMinDate() ;
         if (endDate == null)
             endDate = getMaxDate() ;
-        if(dataPoints.empty())
-            return pointsInRange;
+
 
         DLLComp<Date> tmp = dataPoints.getKeys() ;
         DLL<DataPoint<T>> SortedData = dataPoints.getData();
@@ -107,8 +96,6 @@ public class TimeSeriesImp<T> implements TimeSeries<T> { // This class stores a 
         }
         if ( (tmp.retrieve().compareTo(startDate) >= 0 && tmp.retrieve().compareTo(endDate) <= 0) )
             pointsInRange.insert(SortedData.retrieve()); // Insert data points within the specified range
-        tmp.findNext();
-        SortedData.findNext(); // Both lists are sorted, and their pointers move together with each iteration.
         return pointsInRange;
     }
 }

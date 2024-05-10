@@ -76,6 +76,7 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
             if(current.next == null)
                 tail = current;
         }
+        isSorted = false ;
         ListSize++;
     }
 
@@ -96,7 +97,7 @@ public class DLLCompImp<T extends Comparable<T>> implements DLLComp<T> {
             current = head;
         else
             current = current.next;
-
+        isSorted = false ;
         ListSize--;
     }
 

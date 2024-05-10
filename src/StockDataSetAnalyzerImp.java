@@ -56,7 +56,7 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
             }
 
 
-    FinalCompanies.sort(true);
+    FinalCompanies.sort(false);
     return FinalCompanies ;
     }
 
@@ -89,12 +89,13 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
             }
             AllCompaniesStockHistory.findNext();
         }
-        FinalCompanies.sort(true);
+        FinalCompanies.sort(false);
         return FinalCompanies ;
     }
 
     @Override
-    public DLLComp<CompPair<Pair<String, Date>, Double>> getSortedByMSDPI(Date startDate, Date endDate) {
+    public DLLComp<CompPair<Pair<String, Date>, Double>> getSortedByMSDPI(Date startDate, Date endDate)
+    {
         DLLComp<CompPair<Pair<String, Date>, Double>> FinalCompanies = new DLLCompImp<>() ;
 
         if(SDSAI.getStockHistoryMap().empty())
@@ -113,20 +114,22 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
             if (allDataPointsInRange.size() > 1)
             {
                 allDataPointsInRange.findFirst();
-                double max = 0;
-                Date Maxdate= allDataPointsInRange.retrieve().date;
+                double MaxIncrease = 0;
+                Date Maxdate = null;
                 for(int j = 0; allDataPointsInRange.size() > j; j++) {
-                    if(max < allDataPointsInRange.retrieve().value.high) {
-                        max = allDataPointsInRange.retrieve().value.high;
+                    if(MaxIncrease < (allDataPointsInRange.retrieve().value.close - allDataPointsInRange.retrieve().value.open) / allDataPointsInRange.retrieve().value.open) {
+                        MaxIncrease = (allDataPointsInRange.retrieve().value.close - allDataPointsInRange.retrieve().value.open) / allDataPointsInRange.retrieve().value.open;
                         Maxdate = allDataPointsInRange.retrieve().date;
                     }
                     allDataPointsInRange.findNext();
                 }
-                FinalCompanies.insert(new CompPair<>(new Pair<String,Date>(AllCompaniesStockHistory.retrieve().getCompanyCode(), Maxdate), max));
+                FinalCompanies.insert(new CompPair<>(new Pair<String,Date>(AllCompaniesStockHistory.retrieve().getCompanyCode(), Maxdate), MaxIncrease));
             }
             AllCompaniesStockHistory.findNext();
         }
-        FinalCompanies.sort(true);
+        FinalCompanies.sort(false);
         return FinalCompanies ;
     }
+
+
 }
