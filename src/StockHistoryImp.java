@@ -57,7 +57,5 @@ public class StockHistoryImp implements StockHistory {
         return SDTSI.removeDataPoint(date);
     }
 
-    public void display() {
-        ((TimeSeriesImp) SDTSI).display_stock_history();
-    }
+
 }

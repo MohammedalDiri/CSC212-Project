@@ -37,11 +37,14 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
             StockHistory currentCompany = AllCompaniesStockHistory.retrieve();
             TimeSeries<StockData> tmpSeries = currentCompany.getTimeSeries();
 
-            double startPrice = tmpSeries.getDataPoint(startDate).close;
-            double endPrice =  tmpSeries.getDataPoint(endDate).close;
-            double performance = ((endPrice - startPrice) / startPrice) ;
-            FinalCompanies.insert(new CompPair<>(currentCompany.getCompanyCode(), performance));
-
+            if(!currentCompany.empty()) {
+                if(tmpSeries.getDataPoint(startDate) != null && tmpSeries.getDataPoint(endDate) != null) {
+                    double startPrice = tmpSeries.getDataPoint(startDate).close;
+                    double endPrice = tmpSeries.getDataPoint(endDate).close;
+                    double performance = ((endPrice - startPrice) / startPrice);
+                    FinalCompanies.insert(new CompPair<>(currentCompany.getCompanyCode(), performance));
+                }
+            }
             AllCompaniesStockHistory.findNext();
         }
 

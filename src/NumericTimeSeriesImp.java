@@ -180,15 +180,7 @@ public class NumericTimeSeriesImp implements NumericTimeSeries{
 
     }
 
-    public void display_stock_history() {
-        ((TimeSeriesImp) TimeSeries).display_stock_history();
-    }
 
-
-    public static void display(DLL<Date> L) {
-        TimeSeriesImp.display(L);
-
-    }
 
 
 

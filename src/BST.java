@@ -266,25 +266,6 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         }
     }
 
-        public void displayAllNodesInOrder()
-        {
-            if (root == null)
-                System.out.println("empty map");
-            else {
-                displayAllNodesInOrder(root);
-            }
-            System.out.println();
-        }
-
-        private void displayAllNodesInOrder(BSTNode<K, T> p)
-        {
-            if (p != null) {
-                displayAllNodesInOrder(p.left);
-                System.out.println(p.key + " " + p.data + ", ");
-                displayAllNodesInOrder(p.right);
-            }
-        }
-
     }
 
 

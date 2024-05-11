@@ -98,15 +98,5 @@ public class DLLImp<T> implements DLL<T> {
         return tail;
     }
 
-    public static <T> void display(DLL<T> L) {
-        if (L.empty())
-            return;
-        L.findFirst();
-        while (!L.last()) {
-            System.out.println(L.retrieve() + " ");
-            L.findNext();
-        }
-        System.out.println(L.retrieve());
-        System.out.println("num of existing elements=" + L.size());
-    }
+
 }
