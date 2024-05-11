@@ -25,46 +25,37 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
     {
         DLLComp<CompPair<String, Double>> FinalCompanies = new DLLCompImp<>() ;
 
-       if(SDSAI.getStockHistoryMap().empty() || startDate == null || endDate == null)
-           return FinalCompanies ;
-
+        if(SDSAI.empty() || startDate == null || endDate == null)
+            return FinalCompanies ;
 
         DLLImp<StockHistory> AllCompaniesStockHistory = SDSAI.getAllCompanyStockHistory() ;
 
         AllCompaniesStockHistory.findFirst();
+
         for(int i = 0 ; i < AllCompaniesStockHistory.size() ; i++)
         {
-                StockHistory currentCompany = AllCompaniesStockHistory.retrieve();
-                TimeSeries<StockData> tmpSeries = currentCompany.getTimeSeries();
-                DLL<DataPoint<StockData>> allDataPointsInRange = tmpSeries.getDataPointsInRange(startDate, endDate);
+            StockHistory currentCompany = AllCompaniesStockHistory.retrieve();
+            TimeSeries<StockData> tmpSeries = currentCompany.getTimeSeries();
 
-                if (allDataPointsInRange.size() > 1)
-                {
-                    allDataPointsInRange.findFirst();
-                    double startPrice = allDataPointsInRange.retrieve().value.close; // Price at the start of the date range
+            double startPrice = tmpSeries.getDataPoint(startDate).close;
+            double endPrice =  tmpSeries.getDataPoint(endDate).close;
+            double performance = ((endPrice - startPrice) / startPrice) ;
+            FinalCompanies.insert(new CompPair<>(currentCompany.getCompanyCode(), performance));
 
-                    double endPrice = 0.0;
-
-
-
-                    endPrice = allDataPointsInRange.getLast().data.value.close; // Price at the end of the date range
-
-                    double performance = ((endPrice - startPrice) / startPrice) ;
-                    FinalCompanies.insert(new CompPair<>(currentCompany.getCompanyCode(), performance));
-                }
-                AllCompaniesStockHistory.findNext();
-            }
+            AllCompaniesStockHistory.findNext();
+        }
 
 
-    FinalCompanies.sort(false);
-    return FinalCompanies ;
+        FinalCompanies.sort(false);
+        return FinalCompanies ;
     }
 
     @Override
-    public DLLComp<CompPair<String, Long>> getSortedByVolume(Date startDate, Date endDate) {
+    public DLLComp<CompPair<String, Long>> getSortedByVolume(Date startDate, Date endDate)
+    {
         DLLComp<CompPair<String, Long>> FinalCompanies = new DLLCompImp<>() ;
 
-        if(SDSAI.getStockHistoryMap().empty())
+        if(SDSAI.empty())
             return FinalCompanies ;
 
 
@@ -98,7 +89,7 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
     {
         DLLComp<CompPair<Pair<String, Date>, Double>> FinalCompanies = new DLLCompImp<>() ;
 
-        if(SDSAI.getStockHistoryMap().empty())
+        if(SDSAI.empty())
             return FinalCompanies ;
 
 
@@ -116,7 +107,8 @@ public class StockDataSetAnalyzerImp implements StockDataSetAnalyzer
                 allDataPointsInRange.findFirst();
                 double MaxIncrease = 0;
                 Date Maxdate = null;
-                for(int j = 0; allDataPointsInRange.size() > j; j++) {
+                for(int j = 0; allDataPointsInRange.size() > j; j++)
+                {
                     if(MaxIncrease < (allDataPointsInRange.retrieve().value.close - allDataPointsInRange.retrieve().value.open) / allDataPointsInRange.retrieve().value.open) {
                         MaxIncrease = (allDataPointsInRange.retrieve().value.close - allDataPointsInRange.retrieve().value.open) / allDataPointsInRange.retrieve().value.open;
                         Maxdate = allDataPointsInRange.retrieve().date;

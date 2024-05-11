@@ -10,8 +10,6 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         size = 0 ;
     }
 
-
-
     public boolean empty()
     {
         return root == null;
@@ -229,7 +227,8 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
             p.left = helper_remove(key, p.left, flag); //go left
         else if(key.compareTo(p.key) > 0)
             p.right = helper_remove(key, p.right, flag); //go right
-        else {
+        else
+        {
             size-- ;
             flag[0] = true;
             if (p.left != null && p.right != null)
@@ -250,12 +249,14 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         }
         return p;
     }
-    public DLLImp<T> getData(){ // This method should help with the get data points method.
+    public DLLImp<T> getData()
+    { // This method should help with the get data points method.
         DLLImp<T> SortedPoints = new DLLImp<>();
         getDataHelper( root, SortedPoints);
         return SortedPoints;
     }
-    private void getDataHelper( BSTNode<K,T> t, DLLImp<T> L) {
+    private void getDataHelper( BSTNode<K,T> t, DLLImp<T> L)
+    {
         if (t == null)
             return;
         else {
@@ -265,7 +266,8 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
         }
     }
 
-        public void displayAllNodesInOrder() {
+        public void displayAllNodesInOrder()
+        {
             if (root == null)
                 System.out.println("empty map");
             else {
@@ -274,14 +276,14 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
             System.out.println();
         }
 
-        private void displayAllNodesInOrder(BSTNode<K, T> p) {
+        private void displayAllNodesInOrder(BSTNode<K, T> p)
+        {
             if (p != null) {
                 displayAllNodesInOrder(p.left);
                 System.out.println(p.key + " " + p.data + ", ");
                 displayAllNodesInOrder(p.right);
             }
         }
-
 
     }
 
